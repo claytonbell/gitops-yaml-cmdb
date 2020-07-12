@@ -8,3 +8,11 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 end
+
+module SpecHelperGitopsCmdb
+  def load_yaml_file path
+    YAML.safe_load(
+      File.readlines(path).join
+    )
+  end
+end

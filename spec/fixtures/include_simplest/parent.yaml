@@ -1,5 +1,5 @@
 include:
   - child.yaml
 
-key1: main
-both: main
+key1: parent
+both: parent
