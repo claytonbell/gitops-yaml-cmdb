@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cd "$(dirname "$0")/.."
+
+IMAGE=gitops-yaml-cmdb-dev
+
+docker build --rm --tag "${IMAGE}" .
+
+docker run -ti --rm --volume "$(pwd):/app" "${IMAGE}" "${@}"
