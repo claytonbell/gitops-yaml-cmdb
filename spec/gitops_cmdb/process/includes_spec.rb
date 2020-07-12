@@ -73,6 +73,10 @@ describe GitopsCmdb::Process::Includes do
         expect(result['both']).to eq('parent')
       end
 
+      it 'the include key is removed after processing all the recursive paths' do
+        expect(result.has_key?('include')).to be(false)
+      end
+
     end
 
     context 'parent has two or more includes' do
