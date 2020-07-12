@@ -7,7 +7,7 @@ class GitopsCmdb::DataLoader
   def self.file path
     raise Error unless file_extension_supported?(path)
 
-    YAML.load(
+    YAML.safe_load(
       File.readlines(path).join("\n")
     )
   end
@@ -20,7 +20,7 @@ class GitopsCmdb::DataLoader
     file(uri.host + uri.path)
   end
 
-  private
+  private_class_method
 
   def self.file_extension_supported? path
     path.end_with?('.yml') || path.end_with?('.yaml')
