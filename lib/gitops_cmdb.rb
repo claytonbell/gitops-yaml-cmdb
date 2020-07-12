@@ -1,8 +1,8 @@
 class GitopsCmdb
   class Error < StandardError; end
 
-  def self.read path
-    raise NotImplementedError
+  def self.file_load path
+    Process::Includes.recursive(path)
   end
 end
 
