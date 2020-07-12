@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
 
-gem "rspec"
 gem "activesupport"
+gem "optimist"
+gem "rspec"
