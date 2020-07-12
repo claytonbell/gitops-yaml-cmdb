@@ -1,0 +1,4 @@
+include:
+  - file.yaml
+
+key1: main

@@ -1,3 +1,5 @@
+require 'gitops_cmdb'
+
 RSpec.configure do |config|
   config.mock_with :rspec do |mocks|
     # Prevents you from mocking or stubbing a method that does not exist on
