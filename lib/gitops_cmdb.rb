@@ -2,7 +2,7 @@ class GitopsCmdb
   class Error < StandardError; end
 
   def self.file_load path
-    Process::Includes.recursive(path)
+    Process::Includes.recursive_load(path)
   end
 end
 

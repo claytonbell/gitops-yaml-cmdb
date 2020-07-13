@@ -6,7 +6,7 @@ class GitopsCmdb::Process::Includes
 
   INCLUDE_KEY_NAME = 'include'
 
-  def self.recursive path
+  def self.recursive_load path
     data = GitopsCmdb::DataLoader.file path
     include_list = data.delete(INCLUDE_KEY_NAME)
 
@@ -14,7 +14,7 @@ class GitopsCmdb::Process::Includes
 
     include_list.each do |included_path|
       follow_this_path = path_relative_to(path,included_path)
-      data = recursive(follow_this_path).deep_merge(data)
+      data = recursive_load(follow_this_path).deep_merge(data)
     end
 
     data
