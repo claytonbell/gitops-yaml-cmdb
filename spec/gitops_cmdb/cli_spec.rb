@@ -14,31 +14,34 @@ describe GitopsCmdb::CLI do
     }
   end
 
-  it 'can output in yaml format' do
-    cli = GitopsCmdb::CLI.new(options)
+  context 'selecting different output formats' do
 
-    expect(cli.run).to eq(<<~YAML)
-      ---
-      simple: hash
-YAML
+    it 'yaml' do
+      cli = GitopsCmdb::CLI.new(options)
+
+      expect(cli.run).to eq(<<~YAML)
+        ---
+        simple: hash
+        YAML
+    end
+
+    it 'json' do
+      cli = GitopsCmdb::CLI.new(options.merge(format: 'json'))
+
+      expect(cli.run).to eq('{"simple":"hash"}')
+    end
+
+    it 'bash environment variable' do
+      cli = GitopsCmdb::CLI.new(options.merge(format: 'bash'))
+
+      expect(cli.run).to eq("simple='hash'")
+    end
+
+    it 'export bash environment variable' do
+      cli = GitopsCmdb::CLI.new(options.merge(format: 'bash-export'))
+
+      expect(cli.run).to eq("export simple='hash'")
+    end
+
   end
-
-  it 'can output in json format' do
-    cli = GitopsCmdb::CLI.new(options.merge(format: 'json'))
-
-    expect(cli.run).to eq('{"simple":"hash"}')
-  end
-
-  it 'can output in bash environment variable format' do
-    cli = GitopsCmdb::CLI.new(options.merge(format: 'bash'))
-
-    expect(cli.run).to eq("simple='hash'")
-  end
-
-  it 'can output in bash export environment variable format' do
-    cli = GitopsCmdb::CLI.new(options.merge(format: 'bash-export'))
-
-    expect(cli.run).to eq("export simple='hash'")
-  end
-
 end
