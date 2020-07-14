@@ -1,0 +1,15 @@
+
+include:
+  - ./child1.yaml
+  - ./child2.yaml 
+
+variables:
+  varRoot: varRoot value
+
+# In YAML, values that start with { are considered dictionaries
+# Quoting the value in " or ' ensures that it is treated as a string
+# See https://en.wikipedia.org/wiki/YAML
+
+var_root: "{{varRoot}}"
+concat_root: blah {{varRoot}} snoo
+var_child1: "{{varChild1}}"
