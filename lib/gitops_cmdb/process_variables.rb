@@ -68,13 +68,13 @@ class GitopsCmdb::ProcessVariables
   end
 
   def mustache_get_variable_value name
-    return variables[name] if variables.has_key?(name)
+    return variables[name] if variables.key?(name)
 
     raise Error.new("variable name '#{name}' not defined")
   end
 
   def get_os_environment_variable_value os_env_name
-    return ENV[os_env_name] if ENV.has_key?(os_env_name)
+    return ENV[os_env_name] if ENV.key?(os_env_name)
 
     raise Error.new("OS Environment variable '#{os_env_name}' not defined/set")
   end

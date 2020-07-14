@@ -15,7 +15,7 @@ context 'help on how to use this library' do
     end
 
     it 'the "include:" key is removed from the final result' do
-      expect(result.has_key?('include')).to be(false)
+      expect(result.key?('include')).to be(false)
     end
   end
 
@@ -35,7 +35,7 @@ context 'help on how to use this library' do
       end
 
       it 'the "variables:" key is removed from the final result' do
-        expect(result.has_key?('variables')).to be(false)
+        expect(result.key?('variables')).to be(false)
       end
 
     end

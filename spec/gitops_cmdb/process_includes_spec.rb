@@ -74,7 +74,7 @@ describe GitopsCmdb::ProcessIncludes do
       end
 
       it 'the include key is removed after processing all the recursive_load paths' do
-        expect(result.has_key?('include')).to be(false)
+        expect(result.key?('include')).to be(false)
       end
 
     end
