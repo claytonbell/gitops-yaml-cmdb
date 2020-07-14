@@ -1,28 +1,16 @@
 require 'yaml'
-require 'uri/file'
 
 class GitopsCmdb::DataLoader
   class Error < StandardError; end
 
   def self.file path
-    raise Error unless file_extension_supported?(path)
+    unless path.end_with?('.yml') || path.end_with?('.yaml')
+      raise Error.new(
+        "File name '#{path} error.  Files must be YAML and have extension of .yaml or .yml")
+    end
 
     YAML.safe_load(
       File.readlines(path).join("\n")
     )
-  end
-
-  def self.uri uri_string
-    uri = URI(uri_string)
-
-    raise Error unless uri.scheme == 'file'
-
-    file(uri.host + uri.path)
-  end
-
-  private_class_method
-
-  def self.file_extension_supported? path
-    path.end_with?('.yml') || path.end_with?('.yaml')
   end
 end
