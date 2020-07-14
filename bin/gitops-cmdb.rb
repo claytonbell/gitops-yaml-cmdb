@@ -4,5 +4,6 @@
 $LOAD_PATH.unshift "#{File.dirname(__FILE__)}/../lib"
 
 require 'gitops_cmdb'
+require 'gitops_cmdb/cli'
 
 puts GitopsCmdb::CLI.new.run

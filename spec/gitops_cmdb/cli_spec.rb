@@ -1,3 +1,5 @@
+require 'gitops_cmdb/cli'
+
 describe GitopsCmdb::CLI do
 
   before(:each) do
