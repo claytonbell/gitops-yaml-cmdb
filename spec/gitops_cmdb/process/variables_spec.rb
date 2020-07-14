@@ -39,21 +39,6 @@ describe GitopsCmdb::Process::Variables do
         )
       end
 
-      describe 'raises error when' do
-
-        it 'OS environment variable not set or exported' do
-          data = load_yaml_file('spec/fixtures/variable_os_env/file.yaml')
-
-          expect {
-            subject.translate(data)
-          }.to raise_error(
-            GitopsCmdb::Process::Variables::Error,
-            /OS Environment variable 'OS_ENVIRONMENT_VARIABLE' not defined/
-          )
-        end
-
-      end
-
     end
 
     context 'when including other yaml files' do
@@ -77,6 +62,44 @@ describe GitopsCmdb::Process::Variables do
           expect(data['var_child2']).to eq('varChild2 value')
         end
       end
+
+    end
+
+    describe 'raises error when' do
+
+      it 'OS environment variable not set or exported' do
+        data = load_yaml_file('spec/fixtures/variable_os_env/file.yaml')
+
+        expect {
+          subject.translate(data)
+        }.to raise_error(
+          GitopsCmdb::Process::Variables::Error,
+          /OS Environment variable 'OS_ENVIRONMENT_VARIABLE' not defined/
+        )
+      end
+
+      it "mustache {{ }} variable used, but not defined in 'variables:' hash" do
+        data = load_yaml_file('spec/fixtures/variable_missing/easy.yaml')
+
+        expect {
+          subject.translate(data)
+        }.to raise_error(
+          GitopsCmdb::Process::Variables::Error,
+          /variable name 'bad_var' not defined/
+        )
+      end
+
+      it "mustache {{ }} variable used, but there are no 'variables:' at all" do
+        data = load_yaml_file('spec/fixtures/variable_missing/trivial.yaml')
+
+        expect {
+          subject.translate(data)
+        }.to raise_error(
+          GitopsCmdb::Process::Variables::Error,
+          /variable name 'bad_var' not defined/
+        )
+      end
+
     end
 
   end

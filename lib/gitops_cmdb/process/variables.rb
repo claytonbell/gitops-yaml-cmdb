@@ -6,7 +6,7 @@ class GitopsCmdb::Process::Variables
 
   attr_reader :data, :variables
 
-  # root kety name for variable definitions
+  # root key name for variable definitions
   VARIABLES_KEY = 'variables'
 
   VALID_VARIABLE_NAME = /[A-Za-z0-9_]+/
@@ -17,40 +17,37 @@ class GitopsCmdb::Process::Variables
 
   def initialize data
     @data = data
-    @variables = @data.delete(VARIABLES_KEY)
+    @variables = @data.delete(VARIABLES_KEY) || {}
     validate_variable_names!
     environment_variables_replace!
   end
 
   def translate
-    return data if variables.nil?
-
-    data.map do |key,value|
-      [ key, mustache_replace(value) ]
-    end.to_h
+    data.transform_values { |value| mustache_replace(value) }
   end
 
   private
 
   def validate_variable_names!
-    return if variables.nil?
-
     variables.keys.reject { |name| variable_name_ok?(name) }.each do |name|
       raise Error.new("variable name '#{name}' invalid must only contain [A-Za-z0-9_] can not be _")
     end
   end
 
   def environment_variables_replace!
-    return if variables.nil?
-
+    # @variables.transform_values do |value|
+    #   if match = value.match(/^\s*\$\{(#{VALID_VARIABLE_NAME})\}\s*$/)
+    #     get_os_environment_variable_value(match[1])
+    #   else
+    #     value
+    #   end
+    # end
     variables.keys.each do |name|
       value = variables[name]
 
-      match = value.match(/^\s*\$\{(#{VALID_VARIABLE_NAME})\}\s*$/)
-
-      if match
+      if match = value.match(/^\s*\$\{(#{VALID_VARIABLE_NAME})\}\s*$/)
         os_env_name = match[1]
-        variables[name] = get_os_environment_variable_value(match[1])
+        variables[name] = get_os_environment_variable_value(os_env_name)
       end
     end
   end
@@ -64,7 +61,7 @@ class GitopsCmdb::Process::Variables
   def mustache_replace value
     regex = /(\{\{#{VALID_VARIABLE_NAME}\}\})/
 
-    r = value.split(regex).map do |part|
+    value.split(regex).map do |part|
       match = part.match(/^\{\{(#{VALID_VARIABLE_NAME})\}\}$/)
       match ? mustache_get_variable_value(match[1]) : part
     end.join
