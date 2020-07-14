@@ -45,7 +45,7 @@ class GitopsCmdb::OutputFormatter
   def output_bash data
     export = format=='bash-export' ? 'export ' : ''
 
-    data.each.map do |key,value|
+    data.map do |key,value|
       "#{ export }#{ escape_key(key) }='#{ escape_value(value) }'"
     end.join("\n")
   end

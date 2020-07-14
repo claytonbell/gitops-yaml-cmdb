@@ -8,25 +8,25 @@ describe GitopsCmdb::Process::Includes do
 
     describe 'includes are relative to the yaml file they are in' do
 
-      it 'include file.yaml from root.yaml' do
+      it 'include file.yaml from folder/root.yaml' do
         expect(
           subject.path_relative_to('folder/root.yaml', 'file.yaml')
         ).to eq('folder/file.yaml')
       end
 
-      it 'include ./file.yaml from root.yaml' do
+      it 'include ./file.yaml from folder/root.yaml' do
         expect(
           subject.path_relative_to('folder/root.yaml', 'file.yaml')
         ).to eq('folder/file.yaml')
       end
 
-      it 'include ../dir/file.yaml from root.yaml' do
+      it 'include dir/file.yaml from folder/root.yaml' do
         expect(
-          subject.path_relative_to('folder/root.yaml', '../dir/file.yaml')
-        ).to eq('folder/../dir/file.yaml')
+          subject.path_relative_to('folder/root.yaml', 'dir/file.yaml')
+        ).to eq('folder/dir/file.yaml')
       end
 
-      it 'include ../dir/file.yaml from root.yaml' do
+      it 'include ../dir/file.yaml from folder/root.yaml' do
         expect(
           subject.path_relative_to('folder/root.yaml', '../dir/file.yaml')
         ).to eq('folder/../dir/file.yaml')
@@ -34,9 +34,9 @@ describe GitopsCmdb::Process::Includes do
 
     end
 
-    describe 'invalid include paths' do
+    describe 'raises error when' do
 
-      it 'absolute paths' do
+      it 'including an absolute path' do
         expect {
           subject.path_relative_to('root.yaml', '/bad/path/file.yaml')
         }.to raise_error(subject::Error, /must not be absolute.+ Found in file 'root.yaml'/)
