@@ -1,8 +1,8 @@
 include SpecHelperGitopsCmdb
 
-describe GitopsCmdb::Process::Includes do
+describe GitopsCmdb::ProcessIncludes do
 
-  subject { GitopsCmdb::Process::Includes }
+  subject { GitopsCmdb::ProcessIncludes }
 
   context 'include file path validation' do
 

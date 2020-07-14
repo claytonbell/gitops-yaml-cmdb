@@ -1,3 +1,0 @@
-class GitopsCmdb::Process
-
-end

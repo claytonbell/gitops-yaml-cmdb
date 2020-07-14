@@ -1,7 +1,7 @@
 require 'active_support/core_ext/hash'
 require 'pathname'
 
-class GitopsCmdb::Process::Includes
+class GitopsCmdb::ProcessIncludes
   class Error < StandardError; end
 
   INCLUDE_KEY_NAME = 'include'

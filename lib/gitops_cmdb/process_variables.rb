@@ -1,7 +1,7 @@
 require 'active_support'
 require 'active_support/core_ext/object/blank'
 
-class GitopsCmdb::Process::Variables
+class GitopsCmdb::ProcessVariables
   class Error < StandardError; end
 
   attr_reader :data, :variables

@@ -1,8 +1,8 @@
 include SpecHelperGitopsCmdb
 
-describe GitopsCmdb::Process::Variables do
+describe GitopsCmdb::ProcessVariables do
 
-  subject { GitopsCmdb::Process::Variables }
+  subject { GitopsCmdb::ProcessVariables }
 
   describe 'loading a valid file' do
 
@@ -73,7 +73,7 @@ describe GitopsCmdb::Process::Variables do
         expect {
           subject.translate(data)
         }.to raise_error(
-          GitopsCmdb::Process::Variables::Error,
+          GitopsCmdb::ProcessVariables::Error,
           /OS Environment variable 'OS_ENVIRONMENT_VARIABLE' not defined/
         )
       end
@@ -84,7 +84,7 @@ describe GitopsCmdb::Process::Variables do
         expect {
           subject.translate(data)
         }.to raise_error(
-          GitopsCmdb::Process::Variables::Error,
+          GitopsCmdb::ProcessVariables::Error,
           /variable name 'bad_var' not defined/
         )
       end
@@ -95,7 +95,7 @@ describe GitopsCmdb::Process::Variables do
         expect {
           subject.translate(data)
         }.to raise_error(
-          GitopsCmdb::Process::Variables::Error,
+          GitopsCmdb::ProcessVariables::Error,
           /variable name 'bad_var' not defined/
         )
       end
