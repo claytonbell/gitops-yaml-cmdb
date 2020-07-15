@@ -63,20 +63,9 @@ class GitopsCmdb
     end
 
     def substitute_environment_variables!
-      # @variables.transform_values do |value|
-      #   if match = value.match(/^\s*\$\{(#{VALID_VARIABLE_NAME})\}\s*$/)
-      #     get_os_environment_variable_value(match[1])
-      #   else
-      #     value
-      #   end
-      # end
-      variables.each_key do |name|
-        value = variables[name]
-
-        if (match = value.match(/^\s*\$\{(#{VALID_VARIABLE_NAME})\}\s*$/))
-          os_env_name = match[1]
-          variables[name] = get_os_environment_variable_value(os_env_name)
-        end
+      @variables.transform_values! do |value|
+        match = value.match(/^\s*\$\{(#{VALID_VARIABLE_NAME})\}\s*$/)
+        match ? get_os_environment_variable_value(match[1]) : value
       end
     end
 
