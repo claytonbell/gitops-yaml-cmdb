@@ -1,9 +1,18 @@
 #!/bin/bash
+set -e
 
-cd "$(dirname "$0")"
+pushd "$(dirname "$0")"
 
 IMAGE=${IMAGE:-gitops-yaml-cmdb}
 
 ci/build.sh
 
-docker run -ti --rm "${IMAGE}" bin/gitops-cmdb.rb "${@}"
+popd
+
+docker run \
+  -ti \
+  --rm \
+  --volume "$(pwd):/data" \
+  --workdir /data \
+  "${IMAGE}" \
+    /app/bin/gitops-cmdb.rb "${@}"
