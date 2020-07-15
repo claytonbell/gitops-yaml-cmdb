@@ -26,7 +26,7 @@ class GitopsCmdb
     # root key name for variable definitions
     VARIABLES_KEY = 'variables'.freeze
 
-    VALID_VARIABLE_NAME = /[A-Za-z0-9_]+/.freeze
+    VALID_VARIABLE_NAME = /[A-Za-z0-9_]*/.freeze
 
     def self.translate data
       new(data).translate
@@ -35,15 +35,26 @@ class GitopsCmdb
     def initialize data
       @data = data
       @variables = @data.delete(VARIABLES_KEY) || {}
-      validate_variable_names!
-      environment_variables_replace!
+      setup_variables
     end
 
     def translate
-      data.transform_values { |value| mustache_replace(value) }
+      data.transform_values { |value| mustache_replace(value.to_s) }
     end
 
     private
+
+    def setup_variables
+      convert_variables_to_string_type
+      validate_variable_names!
+      substitute_environment_variables!
+    end
+
+    def convert_variables_to_string_type
+      @variables = @variables.map do |key, value|
+        [key.to_s, value.to_s]
+      end.to_h
+    end
 
     def validate_variable_names!
       variables.keys.reject { |name| variable_name_ok?(name) }.each do |name|
@@ -51,7 +62,7 @@ class GitopsCmdb
       end
     end
 
-    def environment_variables_replace!
+    def substitute_environment_variables!
       # @variables.transform_values do |value|
       #   if match = value.match(/^\s*\$\{(#{VALID_VARIABLE_NAME})\}\s*$/)
       #     get_os_environment_variable_value(match[1])

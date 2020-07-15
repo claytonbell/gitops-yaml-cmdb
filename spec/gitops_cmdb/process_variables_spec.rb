@@ -102,6 +102,42 @@ describe GitopsCmdb::ProcessVariables do
 
     end
 
+    context 'when a file contains values of mixed types' do
+
+      describe 'variable values and data values are not strings' do
+        let(:data) do
+          GitopsCmdb.file_load('spec/fixtures/fixes/mixed_value_types.yaml')
+        end
+
+        it 'integers are converted to strings' do
+          expect(data['integer']).to eq('123')
+        end
+
+        it 'foats are converted to strings' do
+          expect(data['float']).to eq('1.2')
+        end
+
+        it 'booleans are converted to strings' do
+          expect(data['bool']).to eq('true')
+        end
+
+        it 'nulls are converted to EMPTY strings' do
+          expect(data['null']).to eq('')
+        end
+      end
+
+      describe 'variable name not a string' do
+        let(:data) do
+          GitopsCmdb.file_load('spec/fixtures/fixes/mixed_variable_name_types.yaml')
+        end
+
+        it 'integers are converted to strings' do
+          expect(data).to eq({ 'a' => 'very true' })
+        end
+      end
+
+    end
+
   end
 
 end

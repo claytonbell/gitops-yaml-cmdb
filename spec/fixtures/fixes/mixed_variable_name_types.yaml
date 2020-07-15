@@ -1,0 +1,5 @@
+
+variables:
+  true: "very true"
+
+a: "{{true}}"
