@@ -8,7 +8,7 @@ describe GitopsCmdb::OutputFormatter do
 
     it 'yaml' do
       format = subject.new('yaml')
-      expect(format.as_string(data)).to eq(<<~YAML)
+      expect(format.render(data)).to eq(<<~YAML)
         ---
         key: value
         YAML
@@ -16,17 +16,17 @@ describe GitopsCmdb::OutputFormatter do
 
     it 'json' do
       format = subject.new('json')
-      expect(format.as_string(data)).to eq('{"key":"value"}')
+      expect(format.render(data)).to eq('{"key":"value"}')
     end
 
     it 'bash' do
       format = subject.new('bash')
-      expect(format.as_string(data)).to eq("key='value'")
+      expect(format.render(data)).to eq("key='value'")
     end
 
     it 'bash-export' do
       format = subject.new('bash-export')
-      expect(format.as_string(data)).to eq("export key='value'")
+      expect(format.render(data)).to eq("export key='value'")
     end
 
   end
@@ -51,7 +51,7 @@ describe GitopsCmdb::OutputFormatter do
         strange_key_name = '.KEY!'
 
         expect(
-          format.as_string( { strange_key_name => 'value' } )
+          format.render( { strange_key_name => 'value' } )
         ).to eq("_KEY_='value'")
       end
 
@@ -63,7 +63,7 @@ describe GitopsCmdb::OutputFormatter do
         value_with_single_quotes = " it\'s a lovely day."
 
         expect(
-          format.as_string( { 'key' => value_with_single_quotes } )
+          format.render( { 'key' => value_with_single_quotes } )
         ).to eq("key=' it\\'s a lovely day.'")
       end
 

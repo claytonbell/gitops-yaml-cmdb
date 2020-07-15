@@ -23,7 +23,7 @@ class GitopsCmdb::OutputFormatter
     raise(Error, help) unless valid?
   end
 
-  def as_string data
+  def render data
     send(formatter_map[format], data)
   end
 

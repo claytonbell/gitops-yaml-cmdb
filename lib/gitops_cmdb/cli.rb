@@ -14,7 +14,7 @@ class GitopsCmdb::CLI
   end
 
   def run
-    @formatter.as_string(
+    @formatter.render(
       GitopsCmdb.file_load(option[:input])
     )
   end
