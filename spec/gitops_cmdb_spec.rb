@@ -1,5 +1,4 @@
 context 'help on how to use this library' do
-
   describe 'keep your YAML configs DRY, by "include:"-ing multiple YAML files together' do
 
     let(:result) do
@@ -7,11 +6,13 @@ context 'help on how to use this library' do
     end
 
     it 'included files are deep merged' do
-      expect(result).to eq({
-        'key1' => 'parent',
-        'key2' => 'child',
-        'both' => 'parent'
-      })
+      expect(result).to eq(
+        {
+          'key1' => 'parent',
+          'key2' => 'child',
+          'both' => 'parent'
+        }
+      )
     end
 
     it 'the "include:" key is removed from the final result' do
@@ -28,10 +29,12 @@ context 'help on how to use this library' do
       end
 
       it 'and the value substituted into the {{ }} mustache placeholder' do
-        expect(result).to eq({
-          'file' => 'file',
-          'variable' => 'value value1 nice'
-        })
+        expect(result).to eq(
+          {
+            'file' => 'file',
+            'variable' => 'value value1 nice'
+          }
+        )
       end
 
       it 'the "variables:" key is removed from the final result' do
@@ -49,10 +52,12 @@ context 'help on how to use this library' do
 
         result = GitopsCmdb.file_load('spec/fixtures/variable_os_env/file.yaml')
 
-        expect(result).to eq({
-          'file' => 'file',
-          'variable' => 'value myValue nice'
-        })
+        expect(result).to eq(
+          {
+            'file' => 'file',
+            'variable' => 'value myValue nice'
+          }
+        )
       end
 
       it 'blah snoo foo' do
@@ -60,10 +65,12 @@ context 'help on how to use this library' do
 
         result = GitopsCmdb.file_load('spec/fixtures/variable_os_env/file.yaml')
 
-        expect(result).to eq({
-          'file' => 'file',
-          'variable' => 'value blah snoo foo nice'
-        })
+        expect(result).to eq(
+          {
+            'file' => 'file',
+            'variable' => 'value blah snoo foo nice'
+          }
+        )
       end
 
     end

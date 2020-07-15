@@ -1,3 +1,7 @@
+# the public interface for humans and automation to use
+#
+# see spec/gitops_cmdb_spec.rb for examples
+# with descriptions
 class GitopsCmdb
   class Error < StandardError; end
 

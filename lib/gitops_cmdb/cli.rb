@@ -1,5 +1,8 @@
 require 'optimist'
 
+# parse command line options
+# - the entire yaml is processed via GitopsCmdb
+# - this CLI code filters the final result
 class GitopsCmdb::CLI
   class Error < StandardError; end
 
@@ -18,10 +21,11 @@ class GitopsCmdb::CLI
 
   private
 
+  # rubocop:disable Metrics/MethodLength
   def parse_command_line
-    Optimist::options do
+    Optimist.options do
       version '1.0'
-      banner <<~'HelpBanner'
+      banner <<~'HELP_BANNER'
         gitops-yaml-cmdb
 
         Usage: gitops-yaml-cmdb --input PATH [--format FMT]
@@ -29,7 +33,7 @@ class GitopsCmdb::CLI
                   [--exec]
 
         Options:
-        HelpBanner
+        HELP_BANNER
 
       opt(
         :input,
@@ -58,4 +62,5 @@ class GitopsCmdb::CLI
       )
     end
   end
+  # rubocop:enable Metrics/MethodLength
 end

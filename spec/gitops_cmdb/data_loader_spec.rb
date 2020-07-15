@@ -5,7 +5,7 @@ describe GitopsCmdb::DataLoader do
   let(:data) do
     {
       'trivial' => 'file',
-      'valid'  => true
+      'valid' => true
     }
   end
 

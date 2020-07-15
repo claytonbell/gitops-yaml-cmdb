@@ -4,28 +4,28 @@ describe GitopsCmdb::OutputFormatter do
 
   context 'valid format types' do
 
-    let(:data) { {"key" => "value"} }
+    let(:data) { { 'key' => 'value' } }
 
     it 'yaml' do
-      format =  subject.new('yaml')
+      format = subject.new('yaml')
       expect(format.as_string(data)).to eq(<<~YAML)
-      ---
-      key: value
-      YAML
+        ---
+        key: value
+        YAML
     end
 
     it 'json' do
-      format =  subject.new('json')
+      format = subject.new('json')
       expect(format.as_string(data)).to eq('{"key":"value"}')
     end
 
     it 'bash' do
-      format =  subject.new('bash')
+      format = subject.new('bash')
       expect(format.as_string(data)).to eq("key='value'")
     end
 
     it 'bash-export' do
-      format =  subject.new('bash-export')
+      format = subject.new('bash-export')
       expect(format.as_string(data)).to eq("export key='value'")
     end
 
@@ -51,7 +51,7 @@ describe GitopsCmdb::OutputFormatter do
         strange_key_name = '.KEY!'
 
         expect(
-          format.as_string({strange_key_name=>'value'})
+          format.as_string( { strange_key_name => 'value' } )
         ).to eq("_KEY_='value'")
       end
 
@@ -59,15 +59,16 @@ describe GitopsCmdb::OutputFormatter do
 
     describe 'environment variable value' do
 
-      it "single quote is escaped with backlash" do
+      it 'single quote is escaped with backlash' do
         value_with_single_quotes = " it\'s a lovely day."
 
         expect(
-          format.as_string({"key"=>value_with_single_quotes})
+          format.as_string( { 'key' => value_with_single_quotes } )
         ).to eq("key=' it\\'s a lovely day.'")
       end
 
     end
 
   end
+
 end

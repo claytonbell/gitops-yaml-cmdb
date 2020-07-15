@@ -5,7 +5,8 @@ class GitopsCmdb::DataLoader
 
   def self.file path
     unless path.end_with?('.yml') || path.end_with?('.yaml')
-      raise Error.new(
+      raise(
+        Error,
         "File name '#{path} error.  Files must be YAML and have extension of .yaml or .yml"
       )
     end

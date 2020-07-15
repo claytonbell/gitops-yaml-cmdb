@@ -3,7 +3,7 @@ require 'gitops_cmdb/cli'
 describe GitopsCmdb::CLI do
 
   before(:each) do
-    allow(GitopsCmdb).to receive(:file_load).and_return({'simple' => 'hash'})
+    allow(GitopsCmdb).to receive(:file_load).and_return( { 'simple' => 'hash' } )
   end
 
   let(:options) do
@@ -46,4 +46,5 @@ describe GitopsCmdb::CLI do
     end
 
   end
+
 end

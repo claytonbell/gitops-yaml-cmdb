@@ -1,6 +1,18 @@
 require 'json'
 require 'yaml'
 
+# Given a hash object, serialize
+# to a string representation
+#
+# yaml, json, bash, bash-expot
+#
+# yaml & json are "obvious"
+#
+# bash emits a string that can be eval-ed in bash to
+# set environment variables.
+#
+# bash-export is simmilar to bash, but it adds the
+# 'export' keyword to each bash variable assignment.
 class GitopsCmdb::OutputFormatter
   class Error < StandardError; end
 
@@ -8,11 +20,11 @@ class GitopsCmdb::OutputFormatter
 
   def initialize format_kind
     @format = format_kind
-    raise Error.new(help) unless valid?
+    raise(Error, help) unless valid?
   end
 
   def as_string data
-    self.send(formatter_map[format], data)
+    send(formatter_map[format], data)
   end
 
   private
@@ -27,10 +39,10 @@ class GitopsCmdb::OutputFormatter
 
   def formatter_map
     {
-      "yaml" => :output_yaml,
-      "json" => :output_json,
-      "bash" => :output_bash,
-      "bash-export" => :output_bash
+      'yaml' => :output_yaml,
+      'json' => :output_json,
+      'bash' => :output_bash,
+      'bash-export' => :output_bash
     }
   end
 
@@ -43,15 +55,15 @@ class GitopsCmdb::OutputFormatter
   end
 
   def output_bash data
-    export = format=='bash-export' ? 'export ' : ''
+    export = format == 'bash-export' ? 'export ' : ''
 
-    data.map do |key,value|
-      "#{ export }#{ escape_key(key) }='#{ escape_value(value) }'"
+    data.map do |key, value|
+      "#{export}#{escape_key(key)}='#{escape_value(value)}'"
     end.join("\n")
   end
 
   def escape_key key
-    key.gsub(/[^A-Za-z0-9_]/,'_')
+    key.gsub(/[^A-Za-z0-9_]/, '_')
   end
 
   def escape_value value

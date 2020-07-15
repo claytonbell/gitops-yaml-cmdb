@@ -35,7 +35,7 @@ describe GitopsCmdb::ProcessVariables do
         expect(
           subject.translate(data)
         ).to eq(
-          {'file' => 'file', 'variable' => 'value os_env nice'}
+          { 'file' => 'file', 'variable' => 'value os_env nice' }
         )
       end
 
@@ -103,4 +103,5 @@ describe GitopsCmdb::ProcessVariables do
     end
 
   end
+
 end
