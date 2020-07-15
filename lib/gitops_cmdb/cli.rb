@@ -27,7 +27,6 @@ class GitopsCmdb
       Optimist.options do
         version '1.0'
         banner <<~'HELP_BANNER'
-          gitops-yaml-cmdb
 
           Usage: gitops-yaml-cmdb --input PATH [--format FMT]
                     [--get key ...] [--override key=value ...]
@@ -43,7 +42,7 @@ class GitopsCmdb
         )
         opt(
           :get,
-          'Specific data key to get from the YAML file.\nDefaults to all keys',
+          "Specific data key to get from the YAML file.\nDefaults to all keys",
           required: false, type: :string, multi: true
         )
         opt(
@@ -53,7 +52,7 @@ class GitopsCmdb
         )
         opt(
           :format,
-          "Output format must be one of:\n  #{GitopsCmdb::OutputFormatter.supported_types.join(', ')}",
+          "Output format must be one of:\n#{GitopsCmdb::OutputFormatter.supported_types.join(', ')}",
           required: false, default: 'yaml', type: :string, short: :none
         )
         opt(
