@@ -43,17 +43,17 @@ class GitopsCmdb
         )
         opt(
           :get,
-          'Specific key to from the YAML file.  Defaults to all keys',
+          'Specific data key to get from the YAML file.\nDefaults to all keys',
           required: false, type: :string, multi: true
         )
         opt(
           :override,
-          'Override a specific value',
+          "Override a specific variable value.\nThe variable does not have to be in the variables: list",
           required: false, multi: true, type: :string, short: :none
         )
         opt(
           :format,
-          'Output format must be one of: yaml, json, bash, bash-export',
+          "Output format must be one of:\n  #{GitopsCmdb::OutputFormatter.supported_types.join(', ')}",
           required: false, default: 'yaml', type: :string, short: :none
         )
         opt(

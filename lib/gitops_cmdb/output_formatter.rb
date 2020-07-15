@@ -19,32 +19,34 @@ class GitopsCmdb
 
     attr_reader :format
 
+    FORMATTER_MAP = {
+      'yaml' => :output_yaml,
+      'json' => :output_json,
+      'bash' => :output_bash,
+      'bash-export' => :output_bash
+    }.freeze
+
+    def self.supported_types
+      FORMATTER_MAP.keys
+    end
+
     def initialize format_kind
       @format = format_kind
       raise(Error, help) unless valid?
     end
 
     def render data
-      send(formatter_map[format], data)
+      send(FORMATTER_MAP[format], data)
     end
 
     private
 
     def valid?
-      formatter_map.keys.include?(format)
+      FORMATTER_MAP.keys.include?(format)
     end
 
     def help
-      "format '#{format}' invalid must be one of: #{formatter_map.keys.join(' ')}"
-    end
-
-    def formatter_map
-      {
-        'yaml' => :output_yaml,
-        'json' => :output_json,
-        'bash' => :output_bash,
-        'bash-export' => :output_bash
-      }
+      "format '#{format}' invalid must be one of: #{FORMATTER_MAP.keys.join(' ')}"
     end
 
     def output_yaml data

@@ -2,6 +2,14 @@ describe GitopsCmdb::OutputFormatter do
 
   subject { GitopsCmdb::OutputFormatter }
 
+  it 'formatter can tell us what formats it support' do
+    expect(
+      subject.supported_types.sort
+    ).to eq(
+      %w[bash bash-export json yaml]
+    )
+  end
+
   context 'valid format types' do
 
     let(:data) { { 'key' => 'value' } }
