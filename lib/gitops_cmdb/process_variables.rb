@@ -26,7 +26,7 @@ class GitopsCmdb
     # root key name for variable definitions
     VARIABLES_KEY = 'variables'.freeze
 
-    VALID_VARIABLE_NAME = /[A-Za-z0-9_]*/.freeze
+    VALID_VARIABLE_NAME = /[A-Za-z_][A-Za-z0-9_]*/.freeze
 
     def self.translate data
       new(data).translate
