@@ -1,3 +1,8 @@
+require 'gitops_cmdb/output_formatter'
+require 'gitops_cmdb/data_loader'
+require 'gitops_cmdb/process_includes'
+require 'gitops_cmdb/process_variables'
+
 # the public interface for humans and automation to use
 #
 # see spec/gitops_cmdb_spec.rb for examples
@@ -11,8 +16,3 @@ class GitopsCmdb
     )
   end
 end
-
-require 'gitops_cmdb/output_formatter'
-require 'gitops_cmdb/data_loader'
-require 'gitops_cmdb/process_includes'
-require 'gitops_cmdb/process_variables'
