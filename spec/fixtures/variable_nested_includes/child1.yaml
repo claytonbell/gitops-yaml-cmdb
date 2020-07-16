@@ -1,0 +1,4 @@
+variables:
+  varChild1: varChild1 value
+
+child1_templated: this is {{varChild1}}

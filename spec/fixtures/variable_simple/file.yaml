@@ -1,0 +1,6 @@
+
+variables:
+  var1: value1
+
+file: file
+variable: value {{var1}} nice

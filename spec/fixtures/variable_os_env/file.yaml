@@ -1,0 +1,6 @@
+
+variables:
+  var1: ${OS_ENVIRONMENT_VARIABLE}
+
+file: file
+variable: value {{var1}} nice

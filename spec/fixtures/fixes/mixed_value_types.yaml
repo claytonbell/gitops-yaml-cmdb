@@ -1,0 +1,12 @@
+
+variables:
+  i: 1
+  f: 1.1
+  b: false
+  n: null
+
+integer: 123
+float: 1.2
+bool: true
+"null": null
+string: "yes"

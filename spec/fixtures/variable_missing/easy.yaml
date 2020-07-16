@@ -1,0 +1,8 @@
+
+# variable good_var is defined
+variables:
+  good_var: snoo
+  # .. bad_var is not defined
+
+# so this is an error
+key: blah {{good_var}} {{bad_var}} foo

@@ -1,0 +1,4 @@
+variables:
+  varChild2: varChild2 value
+
+var_child2: "{{varChild2}}"

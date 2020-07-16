@@ -1,0 +1,6 @@
+
+# There are no variables: defined at all
+# So bad_var has no value
+
+# this is an error
+key: blah {{bad_var}} snoo

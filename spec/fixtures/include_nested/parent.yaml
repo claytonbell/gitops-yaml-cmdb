@@ -1,0 +1,6 @@
+include:
+  - child/child1.yaml
+  - child/child2.yaml
+
+parent: parent
+parent_grand_child: parent

@@ -1,24 +1,26 @@
 # gitops-yaml-cmdb
 
-## status
+## overview 
 
-work-in-progress
+Simple YAML file CMDB, designed for CI builds & testing
 
-## overview
+* gitops compatible
+* simple file inheritance, so you can DRY and organize your YAML files
+* supports mustache `{{ }}` and OS environment variables `${ }` templating
+* use it with any build or app (doesn't have to be kubernetes)
 
-Simple yaml file CMDB
-
-CI scripts
-Environment files
+This project was born out of the need to manage 1000+ microservices and
+3000+ CI builds. The variety of build scripts, environment config and value
+templating was troublesome.  
 
 ## get a value from the yaml cmdb
 
 ```
 gitops-yaml-cmdb
-  [--get key [..]]     get a value from the cmdb.  Defaults to getting all values
-  --format=<kind>      output format json, yaml, bash, bash-export, default yaml
-  --override var=blah  variables on the command line override those found in the yaml files
-  --exec -- /bin/bash  run a command with environment setup
+  --get key [--get key [..]]  get a value from the cmdb
+  --format=<kind> json, yaml, bash, bash-export
+  --override var=blah
+  --exec -- sush 
 ```
 
 ## file format
@@ -33,10 +35,10 @@ includes:
 
 variables:
   BUILD_NUMBER: ${BUILDKITE_BUILD_NUMBER}
+  app_threads: 4
 
 deployment_role: arn:sdfs:sddsdfsf
 ```
-
 
 ## public api
 
