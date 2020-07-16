@@ -47,7 +47,7 @@ class GitopsCmdb
     def setup_variables
       convert_variables_to_string_type
       validate_variable_names!
-      substitute_environment_variables!
+      substitute_os_environment_variables!
     end
 
     def convert_variables_to_string_type
@@ -62,13 +62,6 @@ class GitopsCmdb
       end
     end
 
-    def substitute_environment_variables!
-      @variables.transform_values! do |value|
-        match = value.match(/^\s*\$\{(#{VALID_VARIABLE_NAME})\}\s*$/)
-        match ? get_os_environment_variable_value(match[1]) : value
-      end
-    end
-
     def variable_name_ok? name
       return false if name == '_' # see man bash _ not valid env variable name
 
@@ -77,16 +70,29 @@ class GitopsCmdb
       false
     end
 
-    def mustache_replace value
-      regex = /(\{\{#{VALID_VARIABLE_NAME}\}\})/
+    def substitute_os_environment_variables!
+      @variables.transform_values! do |value|
+        replace_match_with(value, regex_environment_variable_name) do |env_var_name|
+          get_os_environment_variable_value(env_var_name)
+        end
+      end
+    end
 
-      value.split(regex).map do |part|
-        match = part.match(/^\{\{(#{VALID_VARIABLE_NAME})\}\}$/)
-        match ? mustache_get_variable_value(match[1]) : part
+    def mustache_replace value
+      value.split(regex_mustache).map do |part|
+        replace_match_with(part, regex_mustache_variable_name) do |variable_name|
+          get_variable_value(variable_name)
+        end
       end.join
     end
 
-    def mustache_get_variable_value name
+    def replace_match_with string, regex
+      # TODO: assumption that regex contains at least one capture group ()
+      match = string.match(regex)
+      match ? yield(match[1]) : string
+    end
+
+    def get_variable_value name
       return variables[name] if variables.key?(name)
 
       raise(Error, "variable name '#{name}' not defined")
@@ -96,6 +102,18 @@ class GitopsCmdb
       return ENV[os_env_name] if ENV.key?(os_env_name)
 
       raise(Error, "OS Environment variable '#{os_env_name}' not defined/set")
+    end
+
+    def regex_mustache
+      /(\{\{#{VALID_VARIABLE_NAME}\}\})/.freeze
+    end
+
+    def regex_mustache_variable_name
+      /^\{\{(#{VALID_VARIABLE_NAME})\}\}$/.freeze
+    end
+
+    def regex_environment_variable_name
+      /\$\{(#{VALID_VARIABLE_NAME})\}/.freeze
     end
   end
 end
