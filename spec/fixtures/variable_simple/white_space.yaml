@@ -1,0 +1,7 @@
+
+variables:
+  var1: value1
+  var2: ${  myOS_variable  }
+
+key1: blah {{ var1 }} snoo
+key2: blah {{  var2   }} snoo

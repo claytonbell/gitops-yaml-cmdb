@@ -102,6 +102,23 @@ describe GitopsCmdb::ProcessVariables do
 
     end
 
+    describe 'white space around variable names is ignored' do
+      let(:data) do
+        GitopsCmdb.file_load('spec/fixtures/variable_simple/white_space.yaml')
+      end
+
+      before(:each) { ENV['myOS_variable'] = 'value2' }
+      after(:each) { ENV.delete('myOS_variable') }
+
+      it 'mustache variables {{ }}' do
+        expect(data['key1']).to eq('blah value1 snoo')
+      end
+
+      it 'environment variables ${ }' do
+        expect(data['key2']).to eq('blah value2 snoo')
+      end
+    end
+
     context 'when a file contains values of mixed types' do
 
       describe 'variable values and data values are not strings' do

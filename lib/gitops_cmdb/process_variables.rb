@@ -105,15 +105,15 @@ class GitopsCmdb
     end
 
     def regex_mustache
-      /(\{\{#{VALID_VARIABLE_NAME}\}\})/.freeze
+      /(\{\{\s*#{VALID_VARIABLE_NAME}\s*\}\})/.freeze
     end
 
     def regex_mustache_variable_name
-      /^\{\{(#{VALID_VARIABLE_NAME})\}\}$/.freeze
+      /^\{\{\s*(#{VALID_VARIABLE_NAME})\s*\}\}$/.freeze
     end
 
     def regex_environment_variable_name
-      /\$\{(#{VALID_VARIABLE_NAME})\}/.freeze
+      /\$\{\s*(#{VALID_VARIABLE_NAME})\s*\}/.freeze
     end
   end
 end
