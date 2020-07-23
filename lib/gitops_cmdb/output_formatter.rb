@@ -23,7 +23,8 @@ class GitopsCmdb
       'yaml' => :output_yaml,
       'json' => :output_json,
       'bash' => :output_bash,
-      'bash-export' => :output_bash
+      'bash-export' => :output_bash,
+      'keys' => :output_keys
     }.freeze
 
     def self.supported_types
@@ -71,6 +72,10 @@ class GitopsCmdb
 
     def escape_value value
       value.gsub(/'/) { |quote| "\\#{quote}" }
+    end
+
+    def output_keys data
+      data.keys.sort.join("\n")
     end
   end
 end

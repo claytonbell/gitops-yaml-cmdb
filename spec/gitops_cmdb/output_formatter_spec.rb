@@ -6,7 +6,7 @@ describe GitopsCmdb::OutputFormatter do
     expect(
       subject.supported_types.sort
     ).to eq(
-      %w[bash bash-export json yaml]
+      %w[bash bash-export json keys yaml]
     )
   end
 
@@ -35,6 +35,11 @@ describe GitopsCmdb::OutputFormatter do
     it 'bash-export' do
       format = subject.new('bash-export')
       expect(format.render(data)).to eq("export key='value'")
+    end
+
+    it 'keys' do
+      format = subject.new('keys')
+      expect(format.render(data)).to eq('key')
     end
 
   end
