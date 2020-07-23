@@ -6,6 +6,8 @@ describe GitopsCmdb::ProcessIncludes do
 
   context 'include file path validation' do
 
+    subject { GitopsCmdb::ProcessIncludes::RelativePath }
+
     describe 'includes are relative to the yaml file they are in' do
 
       it 'include file.yaml from folder/root.yaml' do
@@ -39,7 +41,7 @@ describe GitopsCmdb::ProcessIncludes do
       it 'including an absolute path' do
         expect {
           subject.path_relative_to('root.yaml', '/bad/path/file.yaml')
-        }.to raise_error(subject::Error, /must not be absolute.+ Found in file 'root.yaml'/)
+        }.to raise_error(GitopsCmdb::ProcessIncludes::Error, /must not be absolute.+ Found in file 'root.yaml'/)
       end
 
     end
@@ -56,7 +58,7 @@ describe GitopsCmdb::ProcessIncludes do
 
   end
 
-  describe 'includes are recursive_loadly deep merged' do
+  describe 'includes are recursively loaded and deep merged' do
 
     context 'when a single include path is present in the parent' do
 
@@ -134,6 +136,39 @@ describe GitopsCmdb::ProcessIncludes do
       expect {
         subject.recursive_load('spec/fixtures/include_file_not_found/parent.yaml')
       }.to raise_error(Errno::ENOENT, /file_not_found\.yaml/)
+    end
+
+  end
+
+  describe 'additional includes' do
+
+    context 'when no additional includes' do
+
+      it 'works like all the other examples' do
+        result = subject.recursive_load(
+          'spec/fixtures/include_additional/parent.yaml'
+        )
+
+        expect(result['parent']).to eq('parent')
+        expect(result.key?('additional')).to be(false)
+        expect(result['child']).to eq('child')
+      end
+
+    end
+
+    context 'with additional includes' do
+
+      it 'extra includes are processed first, then the includes in the file' do
+        result = subject.recursive_load(
+          'spec/fixtures/include_additional/parent.yaml',
+          ['spec/fixtures/include_additional/additional.yaml']
+        )
+
+        expect(result['parent']).to eq('parent')
+        expect(result['additional']).to eq('additional')
+        expect(result['child']).to eq('additional')
+      end
+
     end
 
   end

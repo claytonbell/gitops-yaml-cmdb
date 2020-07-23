@@ -2,21 +2,22 @@ require 'gitops_cmdb/cli'
 
 describe GitopsCmdb::CLI do
 
-  before(:each) do
-    allow(GitopsCmdb).to receive(:file_load).and_return( { 'simple' => 'hash' } )
-  end
-
   let(:options) do
     {
       input: 'fake.yaml',
       format: 'yaml',
       get: [],
       override: [],
+      include: [],
       exec: false
     }
   end
 
   context 'selecting different output formats' do
+
+    before(:each) do
+      allow(GitopsCmdb).to receive(:file_load).and_return( { 'simple' => 'hash' } )
+    end
 
     it 'yaml' do
       cli = GitopsCmdb::CLI.new(options)
@@ -47,4 +48,22 @@ describe GitopsCmdb::CLI do
 
   end
 
+  context 'include an additional file' do
+    it 'extra file is loaded as if its the first include in the list' do
+      cli = GitopsCmdb::CLI.new(
+        options.merge(
+          input: 'spec/fixtures/include_additional/parent.yaml',
+          include: 'spec/fixtures/include_additional/additional.yaml'
+        )
+      )
+
+      expect(cli.run).to eq(<<~YAML)
+        ---
+        child: additional
+        extra: child
+        additional: additional
+        parent: parent
+        YAML
+    end
+  end
 end

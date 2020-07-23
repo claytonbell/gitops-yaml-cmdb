@@ -16,7 +16,10 @@ class GitopsCmdb
 
     def run
       @formatter.render(
-        GitopsCmdb.file_load(option[:input])
+        GitopsCmdb.file_load(
+          option[:input],
+          prepend_includes: @option.fetch(:include, [])
+        )
       )
     end
 
@@ -28,9 +31,9 @@ class GitopsCmdb
         version '1.0'
         banner <<~'HELP_BANNER'
 
-          Usage: gitops-yaml-cmdb --input PATH [--format FMT]
+          Usage: gitops-yaml-cmdb --input FILE [--format FMT]
                     [--get key ...] [--override key=value ...]
-                    [--exec]
+                    [--include FILE ...] [--exec]
 
           Options:
           HELP_BANNER
@@ -50,6 +53,12 @@ class GitopsCmdb
           "Override a specific variable value.\nThe variable does not have to be in the variables: list",
           required: false, multi: true, type: :string, short: :none
         )
+        opt(
+          :include,
+          "Include additional files, as if they\nwere at the top of the include: list of the input file",
+          required: false, multi: true, type: :string, short: :none
+        )
+
         opt(
           :format,
           "Output format must be one of:\n#{GitopsCmdb::OutputFormatter.supported_types.join(', ')}",

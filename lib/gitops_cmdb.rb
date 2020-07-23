@@ -10,9 +10,23 @@ require 'gitops_cmdb/process_variables'
 class GitopsCmdb
   class Error < StandardError; end
 
-  def self.file_load path
+  def self.file_load path, options = {}
+    new(path, options).load
+  end
+
+  def self.hash_load hash, options = {}
+    file_load(hash, options)
+  end
+
+  def initialize subject, options
+    @subject = subject
+    @prepend_includes = options.fetch(:prepend_includes, [])
+    # @override_variables = options.fetch(:override_variables, [])
+  end
+
+  def load
     ProcessVariables.translate(
-      ProcessIncludes.recursive_load(path)
+      ProcessIncludes.recursive_load(@subject, @prepend_includes)
     )
   end
 end
