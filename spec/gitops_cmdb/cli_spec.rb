@@ -22,7 +22,7 @@ describe GitopsCmdb::CLI do
     end
 
     it 'yaml' do
-      cli = GitopsCmdb::CLI.new(options)
+      cli = subject.new(options)
 
       expect(cli.run).to eq(<<~YAML)
         ---
@@ -31,19 +31,19 @@ describe GitopsCmdb::CLI do
     end
 
     it 'json' do
-      cli = GitopsCmdb::CLI.new(options.merge(format: 'json'))
+      cli = subject.new(options.merge(format: 'json'))
 
       expect(cli.run).to eq('{"simple":"hash"}')
     end
 
     it 'bash environment variable' do
-      cli = GitopsCmdb::CLI.new(options.merge(format: 'bash'))
+      cli = subject.new(options.merge(format: 'bash'))
 
       expect(cli.run).to eq("simple='hash'")
     end
 
     it 'export bash environment variable' do
-      cli = GitopsCmdb::CLI.new(options.merge(format: 'bash-export'))
+      cli = subject.new(options.merge(format: 'bash-export'))
 
       expect(cli.run).to eq("export simple='hash'")
     end
@@ -52,7 +52,7 @@ describe GitopsCmdb::CLI do
 
   context 'include an additional file' do
     it 'extra file is loaded as if its the first include in the list' do
-      cli = GitopsCmdb::CLI.new(
+      cli = subject.new(
         options.merge(
           input: 'spec/fixtures/include_additional/parent.yaml',
           include: 'spec/fixtures/include_additional/additional.yaml'
@@ -71,7 +71,7 @@ describe GitopsCmdb::CLI do
 
   context 'override variables' do
     it 'value can be set, as if it was in the file' do
-      cli = GitopsCmdb::CLI.new(
+      cli = subject.new(
         options.merge(
           input: 'spec/fixtures/variable_simple/file.yaml',
           override: ['var1=blah snoo']
@@ -88,7 +88,7 @@ describe GitopsCmdb::CLI do
 
   context 'specific list of data keys to get' do
     it 'whitelist of keys to display' do
-      cli = GitopsCmdb::CLI.new(
+      cli = subject.new(
         options.merge(
           input: 'spec/fixtures/include_simplest/parent.yaml',
           get: %w[key1 key2]
@@ -103,7 +103,7 @@ describe GitopsCmdb::CLI do
     end
 
     it 'defaults to returning all key/values' do
-      cli = GitopsCmdb::CLI.new(
+      cli = subject.new(
         options.merge(
           input: 'spec/fixtures/include_simplest/parent.yaml',
           get: []
@@ -119,7 +119,7 @@ describe GitopsCmdb::CLI do
     end
 
     it 'unknown key to get raises error' do
-      cli = GitopsCmdb::CLI.new(
+      cli = subject.new(
         options.merge(
           input: 'spec/fixtures/include_simplest/parent.yaml',
           get: ['bad_key_name']
