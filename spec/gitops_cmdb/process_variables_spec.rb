@@ -65,6 +65,19 @@ describe GitopsCmdb::ProcessVariables do
 
     end
 
+    context 'when overriding variable values' do
+
+      it 'replaces existing variable value, as if it was defined in the file' do
+        data = subject.translate(
+          load_yaml_file('spec/fixtures/variable_simple/file.yaml'),
+          { 'var1' => 'override blah' }
+        )
+
+        expect(data['variable']).to eq('value override blah nice')
+      end
+
+    end
+
     describe 'raises error when' do
 
       it 'OS environment variable not set or exported' do

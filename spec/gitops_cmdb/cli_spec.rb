@@ -66,4 +66,22 @@ describe GitopsCmdb::CLI do
         YAML
     end
   end
+
+  context 'override variables' do
+    it 'value can be set, as if it was in the file' do
+      cli = GitopsCmdb::CLI.new(
+        options.merge(
+          input: 'spec/fixtures/variable_simple/file.yaml',
+          override: ['var1=blah snoo']
+        )
+      )
+
+      expect(cli.run).to eq(<<~YAML)
+        ---
+        file: file
+        variable: value blah snoo nice
+        YAML
+    end
+  end
+
 end

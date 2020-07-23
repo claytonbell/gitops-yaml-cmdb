@@ -21,12 +21,13 @@ class GitopsCmdb
   def initialize subject, options
     @subject = subject
     @prepend_includes = options.fetch(:prepend_includes, [])
-    # @override_variables = options.fetch(:override_variables, [])
+    @override_variables = options.fetch(:override_variables, {})
   end
 
   def load
     ProcessVariables.translate(
-      ProcessIncludes.recursive_load(@subject, @prepend_includes)
+      ProcessIncludes.recursive_load(@subject, @prepend_includes),
+      @override_variables
     )
   end
 end

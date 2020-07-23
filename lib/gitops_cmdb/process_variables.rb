@@ -28,13 +28,14 @@ class GitopsCmdb
 
     VALID_VARIABLE_NAME = /[A-Za-z_][A-Za-z0-9_]*/.freeze
 
-    def self.translate data
-      new(data).translate
+    def self.translate data, override_variables = {}
+      new(data, override_variables).translate
     end
 
-    def initialize data
+    def initialize data, override_variables
       @data = data
       @variables = @data.delete(VARIABLES_KEY) || {}
+      @variables.merge!(override_variables)
       setup_variables
     end
 

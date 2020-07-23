@@ -18,7 +18,8 @@ class GitopsCmdb
       @formatter.render(
         GitopsCmdb.file_load(
           option[:input],
-          prepend_includes: @option.fetch(:include, [])
+          prepend_includes: @option.fetch(:include, []),
+          override_variables: parse_override_option
         )
       )
     end
@@ -58,7 +59,6 @@ class GitopsCmdb
           "Include additional files, as if they\nwere at the top of the include: list of the input file",
           required: false, multi: true, type: :string, short: :none
         )
-
         opt(
           :format,
           "Output format must be one of:\n#{GitopsCmdb::OutputFormatter.supported_types.join(', ')}",
@@ -72,5 +72,20 @@ class GitopsCmdb
       end
     end
     # rubocop:enable Metrics/MethodLength
+
+    def parse_override_option
+      variables = {}
+
+      option[:override].each do |string|
+        match = string.match(/^(.+?)=(.*)$/)
+        if match
+          variables[match[1]] = match[2]
+        else
+          raise(Error, "override must be of the form 'key=value'.  Unable to parse '#{string}'.")
+        end
+      end
+
+      variables
+    end
   end
 end
