@@ -2,6 +2,8 @@ require 'gitops_cmdb/cli'
 
 describe GitopsCmdb::CLI do
 
+  subject { GitopsCmdb::CLI }
+
   let(:options) do
     {
       input: 'fake.yaml',
@@ -81,6 +83,53 @@ describe GitopsCmdb::CLI do
         file: file
         variable: value blah snoo nice
         YAML
+    end
+  end
+
+  context 'specific list of data keys to get' do
+    it 'whitelist of keys to display' do
+      cli = GitopsCmdb::CLI.new(
+        options.merge(
+          input: 'spec/fixtures/include_simplest/parent.yaml',
+          get: %w[key1 key2]
+        )
+      )
+
+      expect(cli.run).to eq(<<~YAML)
+        ---
+        key1: parent
+        key2: child
+        YAML
+    end
+
+    it 'defaults to returning all key/values' do
+      cli = GitopsCmdb::CLI.new(
+        options.merge(
+          input: 'spec/fixtures/include_simplest/parent.yaml',
+          get: []
+        )
+      )
+
+      expect(cli.run).to eq(<<~YAML)
+        ---
+        key2: child
+        both: parent
+        key1: parent
+        YAML
+    end
+
+    it 'unknown key to get raises error' do
+      cli = GitopsCmdb::CLI.new(
+        options.merge(
+          input: 'spec/fixtures/include_simplest/parent.yaml',
+          get: ['bad_key_name']
+        )
+      )
+
+      expect { cli.run }.to raise_error(
+        subject::Error,
+        %r{key name 'bad_key_name' not found when loading file 'spec/fixtures/include_simplest/parent.yaml'}
+      )
     end
   end
 

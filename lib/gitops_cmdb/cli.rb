@@ -16,11 +16,25 @@ class GitopsCmdb
 
     def run
       @formatter.render(
-        GitopsCmdb.file_load(
-          option[:input],
-          prepend_includes: @option.fetch(:include, []),
-          override_variables: parse_override_option
-        )
+        filter_data_by_get_keys(file_load)
+      )
+    end
+
+    def filter_data_by_get_keys data
+      return data if option[:get].empty?
+
+      option[:get].each do |get_key|
+        get_error!(get_key) unless data.key?(get_key)
+      end
+
+      data.slice( *option[:get] )
+    end
+
+    def file_load
+      GitopsCmdb.file_load(
+        option[:input],
+        prepend_includes: @option.fetch(:include, []),
+        override_variables: parse_override_option
       )
     end
 
@@ -46,7 +60,7 @@ class GitopsCmdb
         )
         opt(
           :get,
-          "Specific data key to get from the YAML file.\nDefaults to all keys",
+          "Specific data keys to get from the YAML file.\nDefaults to all keys",
           required: false, type: :string, multi: true
         )
         opt(
@@ -67,25 +81,26 @@ class GitopsCmdb
         opt(
           :exec,
           'Execute a command with the environment variables setup.',
-          required: false, type: :string, short: :none
+          required: false, type: :boolean, short: :none
         )
       end
     end
     # rubocop:enable Metrics/MethodLength
 
     def parse_override_option
-      variables = {}
-
-      option[:override].each do |string|
+      option[:override].map do |string|
         match = string.match(/^(.+?)=(.*)$/)
-        if match
-          variables[match[1]] = match[2]
-        else
-          raise(Error, "override must be of the form 'key=value'.  Unable to parse '#{string}'.")
-        end
-      end
+        override_error!(string) unless match
+        [match[1], match[2]]
+      end.to_h
+    end
 
-      variables
+    def override_error! string
+      raise(Error, "override must be of the form 'key=value'.  Unable to parse '#{string}'.")
+    end
+
+    def get_error! key_name
+      raise(Error, "data key name '#{key_name}' not found when loading file '#{option[:input]}'")
     end
   end
 end
