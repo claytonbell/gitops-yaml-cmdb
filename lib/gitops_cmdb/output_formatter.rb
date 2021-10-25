@@ -62,7 +62,7 @@ class GitopsCmdb
       export = format == 'bash-export' ? 'export ' : ''
 
       data.map do |key, value|
-        "#{export}#{escape_key(key)}='#{escape_value(value)}'"
+        "#{export}#{escape_key(key)}='#{escape_value(value.to_s)}'"
       end.join("\n")
     end
 

@@ -35,17 +35,34 @@ class GitopsCmdb
     def initialize data, override_variables
       @data = data
       @variables = @data.delete(VARIABLES_KEY) || {}
-      @variables.merge!(override_variables)
-      setup_variables
+      prepare_variables(override_variables)
     end
 
     def translate
-      data.transform_values { |value| mustache_replace(value.to_s) }
+      deep_translate(data)
     end
 
     private
 
-    def setup_variables
+    # recursively traverse hash and replace values with
+    # mustache evaluated values
+    def deep_translate(a_hash)
+      a_hash.transform_values do |value|
+        case value
+        when Hash
+          deep_translate(value)
+        when String
+          mustache_replace(value)
+        else
+          value.to_s
+        end
+      end
+    end
+
+    def prepare_variables(override_variables)
+      raise(Error, "variables '#{VARIABLES_KEY}' must be a hash, got #{@variables.class}") unless @variables.is_a?(Hash)
+
+      @variables.merge!(override_variables)
       convert_variables_to_string_type
       validate_variable_names!
       substitute_os_environment_variables!

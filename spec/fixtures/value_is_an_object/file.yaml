@@ -1,0 +1,7 @@
+
+variables:
+  var1: replaced
+
+simple: "string {{var1}}"
+complex:
+  nested: "hashes also {{var1}}"

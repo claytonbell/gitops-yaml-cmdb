@@ -132,7 +132,7 @@ describe GitopsCmdb::ProcessVariables do
       end
     end
 
-    context 'when a file contains values of mixed types' do
+    context 'when a file contains values of non-string types' do
 
       describe 'variable values and data values are not strings' do
         let(:data) do
@@ -156,14 +156,21 @@ describe GitopsCmdb::ProcessVariables do
         end
       end
 
-      describe 'variable name not a string' do
+      describe 'nested hash value' do
         let(:data) do
-          GitopsCmdb.file_load('spec/fixtures/fixes/mixed_variable_name_types.yaml')
+          GitopsCmdb.file_load('spec/fixtures/value_is_an_object/file.yaml')
         end
 
-        it 'integers are converted to strings' do
-          expect(data).to eq({ 'a' => 'very true' })
+        it 'mustache templating occurs in simple string values at the root' do
+          expect(data['simple']).to eq('string replaced')
         end
+
+        it 'descend recursively and mustache template the string values' do
+          expect(data['complex']).to eq(
+            { 'nested' => 'hashes also replaced' }
+          )
+        end
+
       end
 
     end
