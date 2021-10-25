@@ -75,9 +75,10 @@ class GitopsCmdb
     end
 
     def validate_variable_names!
-      variables.keys.reject { |name| variable_name_ok?(name) }.each do |name|
-        raise(Error, "variable name '#{name}' invalid must only contain [A-Za-z0-9_] can not be _")
-      end
+      invalid_names = variables.keys.reject { |name| variable_name_ok?(name) }
+      return if invalid_names.empty?
+
+      raise(Error, "variable name '#{invalid_names.first}' invalid must only contain [A-Za-z0-9_] can not be _")
     end
 
     def variable_name_ok? name

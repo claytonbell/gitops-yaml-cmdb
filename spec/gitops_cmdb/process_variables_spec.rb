@@ -161,14 +161,14 @@ describe GitopsCmdb::ProcessVariables do
           GitopsCmdb.file_load('spec/fixtures/fixes/mixed_variable_name_types.yaml')
         end
 
-        it 'bool is a string?' #do
-          #puts YAML.safe_load(File.readlines('spec/fixtures/fixes/mixed_variable_name_types.yaml').join("\n"))
-          #expect(data['boolean']).to eq(true)
-        #end
+        it 'bool is a string?' # do
+        #   puts YAML.safe_load(File.readlines('spec/fixtures/fixes/mixed_variable_name_types.yaml').join("\n"))
+        #   expect(data['boolean']).to eq(true)
+        # end
 
-        it 'integer is a string?' #do
-          #expect(data['integer']).to eq(4)
-        #end
+        it 'integer is a string?' # do
+        #   expect(data['integer']).to eq(4)
+        # end
       end
 
       describe 'nested hash value' do
