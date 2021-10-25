@@ -1,5 +1,9 @@
 
 variables:
-  true: "very true"
+  bool: true
+  number: 4
 
-a: "{{true}}"
+boolean: !!bool> "{{bool}}"
+string: "{{number}}"
+integer: !!Integer "4"
+# float: !!float "{{number}}"

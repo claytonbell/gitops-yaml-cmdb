@@ -132,28 +132,43 @@ describe GitopsCmdb::ProcessVariables do
       end
     end
 
-    context 'when a file contains values of non-string types' do
+    context 'when the file contains non-string values' do
 
-      describe 'variable values and data values are not strings' do
+      describe 'data value type is unchanged' do
         let(:data) do
           GitopsCmdb.file_load('spec/fixtures/fixes/mixed_value_types.yaml')
         end
 
-        it 'integers are converted to strings' do
-          expect(data['integer']).to eq('123')
+        it 'integers are integers' do
+          expect(data['integer']).to eq(123)
         end
 
-        it 'foats are converted to strings' do
-          expect(data['float']).to eq('1.2')
+        it 'foats are floats' do
+          expect(data['float']).to eq(1.2)
         end
 
-        it 'booleans are converted to strings' do
-          expect(data['bool']).to eq('true')
+        it 'booleans are booleans' do
+          expect(data['bool']).to eq(true)
         end
 
-        it 'nulls are converted to EMPTY strings' do
-          expect(data['null']).to eq('')
+        it 'nulls are nil' do
+          expect(data['null']).to eq(nil)
         end
+      end
+
+      describe 'variable value type is unchanged, when mustache templated' do
+        let(:data) do
+          GitopsCmdb.file_load('spec/fixtures/fixes/mixed_variable_name_types.yaml')
+        end
+
+        it 'bool is a string?' #do
+          #puts YAML.safe_load(File.readlines('spec/fixtures/fixes/mixed_variable_name_types.yaml').join("\n"))
+          #expect(data['boolean']).to eq(true)
+        #end
+
+        it 'integer is a string?' #do
+          #expect(data['integer']).to eq(4)
+        #end
       end
 
       describe 'nested hash value' do
@@ -165,7 +180,7 @@ describe GitopsCmdb::ProcessVariables do
           expect(data['simple']).to eq('string replaced')
         end
 
-        it 'descend recursively and mustache template the string values' do
+        it 'descend recursively and mustache template the nested string values' do
           expect(data['complex']).to eq(
             { 'nested' => 'hashes also replaced' }
           )

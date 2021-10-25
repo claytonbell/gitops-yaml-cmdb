@@ -54,7 +54,7 @@ class GitopsCmdb
         when String
           mustache_replace(value)
         else
-          value.to_s
+          value
         end
       end
     end
