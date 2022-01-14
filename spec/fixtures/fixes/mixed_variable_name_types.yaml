@@ -3,7 +3,7 @@ variables:
   bool: true
   number: 4
 
-boolean: !!bool> "{{bool}}"
-string: "{{number}}"
-integer: !!Integer "4"
-# float: !!float "{{number}}"
+boolean: "{{bool}}"
+boolean_in_a_string: this is {{bool}}
+number: {{number}}
+number_in_a_string: "{{number}} is my favoriate number"

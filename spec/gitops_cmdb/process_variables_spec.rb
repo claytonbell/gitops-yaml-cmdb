@@ -156,18 +156,18 @@ describe GitopsCmdb::ProcessVariables do
         end
       end
 
-      describe 'variable value type is unchanged, when mustache templated' do
+      describe 'value type may change when mustache template is evaluated' do
         let(:data) do
           GitopsCmdb.file_load('spec/fixtures/fixes/mixed_variable_name_types.yaml')
         end
 
-        it 'bool is a string?' # do
-        #   expect(data['boolean']).to eq(true)
-        # end
+        it 'boolean is a boolean when the value is just a mustache template and nothing else e.g. "{{variable}}"' do
+          expect(data['boolean']).to eq(true)
+        end
 
-        it 'integer is a string?' # do
-        #   expect(data['integer']).to eq(4)
-        # end
+        it 'boolean becomes a string when templated inside a string e.g. "blah {{variable}}"' do
+          expect(data['boolean_in_a_string']).to eq('this is true')
+        end
       end
 
       describe 'value is a hash' do
@@ -204,7 +204,7 @@ describe GitopsCmdb::ProcessVariables do
 
     end
 
-    context 'when keys have variables' do
+    context 'when keys contain variables' do
       let(:data) do
         GitopsCmdb.file_load('spec/fixtures/key_with_variable/file.yaml')
       end

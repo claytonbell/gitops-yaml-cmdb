@@ -76,15 +76,8 @@ class GitopsCmdb
       raise(Error, "variables '#{VARIABLES_KEY}' must be a hash, got #{@variables.class}") unless @variables.is_a?(Hash)
 
       @variables.merge!(override_variables)
-      convert_variables_to_string_type
       validate_variable_names!
       substitute_os_environment_variables!
-    end
-
-    def convert_variables_to_string_type
-      @variables = @variables.map do |key, value|
-        [key.to_s, value.to_s]
-      end.to_h
     end
 
     def validate_variable_names!
@@ -111,14 +104,27 @@ class GitopsCmdb
     end
 
     def mustache_replace value
-      value.split(regex_mustache).map do |part|
+      result = value.split(regex_mustache).map do |part|
         replace_match_with(part, regex_mustache_variable_name) do |variable_name|
           get_variable_value(variable_name)
         end
-      end.join
+      end
+
+      result.reject! { |item| item == '' }
+      # .join will always return a string result.  if there's only
+      # a single item in result, it could be from a bare mustache value
+      # # example yaml
+      # variables:
+      #   var1: 4
+      #
+      # number: "{{var1}}"
+      # string: "this will be a string {{var1}}"
+      result.size == 1 ? result.first : result.join
     end
 
     def replace_match_with string, regex
+      return string unless string.instance_of?(String)
+
       # TODO: assumption that regex contains at least one capture group ()
       match = string.match(regex)
       match ? yield(match[1]) : string
