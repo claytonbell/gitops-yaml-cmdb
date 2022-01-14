@@ -44,19 +44,32 @@ class GitopsCmdb
 
     private
 
-    # recursively traverse hash and replace values with
-    # mustache evaluated values
-    def deep_translate(a_hash)
-      a_hash.transform_values do |value|
-        case value
-        when Hash
-          deep_translate(value)
-        when String
-          mustache_replace(value)
-        else
-          value
-        end
+    # recursively traverse supported object types and
+    # replace values with mustache evaluated values
+    # rubocop:disable Metrics/MethodLength
+    def deep_translate(object)
+      case object
+      when Hash
+        deep_translate_hash(object)
+      when String
+        mustache_replace(object)
+      when Array
+        object.map { |item| deep_translate(item) }
+      when Integer, Float, TrueClass, FalseClass, NilClass
+        object
+      else
+        raise(Error, "Got '#{object.class}' only String, Integer, Float, Array, Hash are supported")
       end
+    end
+    # rubocop:enable Metrics/MethodLength
+
+    def deep_translate_hash(a_hash)
+      result = {}
+      a_hash.each do |key, value|
+        key = key.is_a?(String) ? mustache_replace(key) : key
+        result[key] = deep_translate(value)
+      end
+      result
     end
 
     def prepare_variables(override_variables)

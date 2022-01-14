@@ -1,0 +1,7 @@
+
+variables:
+  var1: replaced
+
+blah-{{var1}}: value
+policy:
+  nested-{{var1}}: hooray

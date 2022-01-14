@@ -1,0 +1,9 @@
+
+variables:
+  var1: replaced
+
+simple: "string {{var1}}"
+policy:
+  - sid: sample AWS policy
+    principal: arn::s3::bucket-{{var1}}/path
+

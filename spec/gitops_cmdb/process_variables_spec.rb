@@ -162,7 +162,6 @@ describe GitopsCmdb::ProcessVariables do
         end
 
         it 'bool is a string?' # do
-        #   puts YAML.safe_load(File.readlines('spec/fixtures/fixes/mixed_variable_name_types.yaml').join("\n"))
         #   expect(data['boolean']).to eq(true)
         # end
 
@@ -171,9 +170,9 @@ describe GitopsCmdb::ProcessVariables do
         # end
       end
 
-      describe 'nested hash value' do
+      describe 'value is a hash' do
         let(:data) do
-          GitopsCmdb.file_load('spec/fixtures/value_is_an_object/file.yaml')
+          GitopsCmdb.file_load('spec/fixtures/value_is_a_hash/file.yaml')
         end
 
         it 'mustache templating occurs in simple string values at the root' do
@@ -186,6 +185,41 @@ describe GitopsCmdb::ProcessVariables do
           )
         end
 
+      end
+
+      describe 'value is an array' do
+        let(:data) do
+          GitopsCmdb.file_load('spec/fixtures/value_is_an_array/file.yaml')
+        end
+
+        it 'mustache templating occurs in simple string values at the root' do
+          expect(data['simple']).to eq('string replaced')
+        end
+
+        it 'descend recursively and mustache template the nested string values' do
+          expect(data['policy'].first['principal']).to eq('arn::s3::bucket-replaced/path')
+        end
+
+      end
+
+    end
+
+    context 'when keys have variables' do
+      let(:data) do
+        GitopsCmdb.file_load('spec/fixtures/key_with_variable/file.yaml')
+      end
+
+      it 'mustache templating of keys at the root' do
+        expect(data['blah-replaced']).to eq('value')
+      end
+
+      it 'descend recursively and mustache template the nested keys' do
+        expect(data['policy']['nested-replaced']).to eq('hooray')
+      end
+
+      it 'the original untemplated key is absent from the final result, since it was replaced by templated values' do
+        expect(data.key?('blah-{{var1}}')).to eq(false)
+        expect(data['policy'].key?('nested-{{var1}}')).to eq(false)
       end
 
     end
