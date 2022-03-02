@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'bundler'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rubocop'
+  gem.runtime_dependencies 'json'
+  gem.runtime_dependencies 'activesupport'
 end
